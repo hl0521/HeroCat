@@ -1,0 +1,145 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:layout_scrollFlags="scroll|enterAlways" />
+
+    </android.support.design.widget.AppBarLayout>
+
+    <FrameLayout
+        android:id="@+id/login_main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/login_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="16dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingTop="16dp"
+            android:visibility="visible">
+
+            <me.uteacher.www.herocat.widget.CircleImageView
+                android:id="@+id/user_portrait"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center"
+                android:layout_marginTop="12dp"
+                android:src="@drawable/ic_launcher"
+                app:civ_border_color="@color/blue"
+                app:civ_border_width="3dp" />
+
+            <me.uteacher.www.herocat.widget.ClearEditText
+                android:id="@+id/loginAccount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/user_portrait"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="12dp"
+                android:drawableEnd="@drawable/ico_delete"
+                android:drawableLeft="@drawable/ico_user"
+                android:drawablePadding="24dp"
+                android:drawableRight="@drawable/ico_delete"
+                android:drawableStart="@drawable/ico_user"
+                android:hint="@string/login_account"
+                android:inputType="textVisiblePassword"
+                android:paddingTop="16dp"
+                android:textSize="16sp" />
+
+            <me.uteacher.www.herocat.widget.ClearEditText
+                android:id="@+id/loginPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/loginAccount"
+                android:drawableEnd="@drawable/ico_delete"
+                android:drawableLeft="@drawable/ic_black_lock"
+                android:drawablePadding="24dp"
+                android:drawableRight="@drawable/ico_delete"
+                android:drawableStart="@drawable/ic_black_lock"
+                android:hint="@string/login_password"
+                android:inputType="textPassword"
+                android:paddingTop="16dp"
+                android:textSize="16sp" />
+
+            <Button
+                android:id="@+id/loginButton"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/loginPassword"
+                android:layout_centerVertical="true"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/selector_button"
+                android:clickable="false"
+                android:text="@string/login_button"
+                android:textColor="#FFFFFF"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/loginProblem"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/loginButton"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
+                android:paddingTop="16dp"
+                android:text="@string/login_problem"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/loginOtherWay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/loginButton"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
+                android:paddingTop="16dp"
+                android:text="@string/login_otherway" />
+
+            <TextView
+                android:id="@+id/loginRegister"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="20dp"
+                android:text="@string/login_register"
+                android:textColor="@color/colorPrimary"
+                android:textSize="18sp" />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/forget_password_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+        </LinearLayout>
+
+
+    </FrameLayout>
+
+</LinearLayout>

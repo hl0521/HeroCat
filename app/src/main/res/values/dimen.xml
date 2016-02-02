@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="large_button_size">24dp</dimen>
+
+    <!-- used for cardview -->
+    <dimen name="button_video_control">10dp</dimen>
+</resources>

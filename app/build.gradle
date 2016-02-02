@@ -1,0 +1,64 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion "23.0.1"
+
+    defaultConfig {
+        applicationId "me.uteacher.www.herocat"
+        minSdkVersion 14
+        targetSdkVersion 23
+        versionCode 1
+        versionName "1.0"
+        // Enabling multidex support.
+        multiDexEnabled true
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    // 为了解决部分第三方库重复打包了META-INF的问题
+    packagingOptions {
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+    }
+    lintOptions {
+        abortOnError false
+    }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    testCompile 'junit:junit:4.12'
+    compile 'com.android.support:appcompat-v7:23.1.1'
+    compile 'com.android.support:design:23.1.1'
+    compile 'com.jakewharton:butterknife:7.0.1'
+    compile 'com.android.support:recyclerview-v7:23.1.1'
+    compile 'com.android.support:cardview-v7:23.1.1'
+    compile 'com.facebook.fresco:fresco:0.8.1'
+    compile 'com.marshalchen.ultimaterecyclerview:library:0.3.18'
+    compile 'com.squareup:otto:1.3.8'
+    compile files('libs/fastjson-1.1.46.android.jar')
+
+    compile('com.github.afollestad.material-dialogs:core:0.8.5.3@aar') {
+        transitive = true
+    }
+
+    //avoscloud-sdk 为 LeanCloud基础包
+    compile 'cn.leancloud.android:avoscloud-sdk:v3.+'
+
+    //avoscloud-statistics 为 LeanCloud 统计包
+    compile 'cn.leancloud.android:avoscloud-statistics:v3.+'
+
+    //avoscloud-sns 为 LeanCloud 第三方登录包
+    compile 'cn.leancloud.android:avoscloud-sns:v3.+@aar'
+    compile 'cn.leancloud.android:qq-sdk:1.6.1-leancloud'
+
+    //avoscloud-search 为 LeanCloud 应用内搜索包
+    compile 'cn.leancloud.android:avoscloud-search:v3.+@aar'
+}
