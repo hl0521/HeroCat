@@ -1,6 +1,7 @@
 package me.uteacher.www.herocat.module.setting;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
@@ -109,6 +110,7 @@ public class SettingFragment extends BaseFragment implements ISettingView {
     @Override
     public void setupToolbar() {
         toolbar.setTitle(R.string.setting);
+        toolbar.setTitleTextColor(Color.WHITE);
 
         ((MainActivity) getActivity()).setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(R.drawable.icon_white_previous);

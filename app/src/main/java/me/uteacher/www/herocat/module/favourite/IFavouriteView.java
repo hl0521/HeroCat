@@ -41,7 +41,12 @@ public interface IFavouriteView extends IBaseView, IDebug {
      *
      * @param items 待添加的 Instagram 数据集
      */
-    public void appendAdapterDateSet(List<IInstagramModel> items);
+    public void appendAdapterDataSet(List<IInstagramModel> items);
+
+    /**
+     * 清空 Adapter 的数据集
+     */
+    public void clearAdapterDataSet();
 
     /**
      * 通知 RecyclerView 的 Adapter，数据集发生了改变

@@ -12,6 +12,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javax.xml.transform.Source;
 
@@ -74,6 +75,8 @@ public class AVApplicationDAOImpl extends BaseDAO implements IApplicationDAO {
     @Override
     public void getApplication(final IDAOGetCallback<IApplicationModel> callback) {
         AVQuery<AVObject> avQuery = new AVQuery<>("Application");
+        avQuery.setCachePolicy(AVQuery.CachePolicy.NETWORK_ELSE_CACHE);
+        avQuery.setMaxCacheAge(TimeUnit.DAYS.toDays(3));
 
         avQuery.findInBackground(new FindCallback<AVObject>() {
             @Override

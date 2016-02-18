@@ -1,6 +1,7 @@
 package me.uteacher.www.herocat.module.favourite;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -46,6 +47,8 @@ public class FavouriteFragment extends BaseFragment implements IFavouriteView {
     private IMainView mainView;
     private IFavouritePresenter favouritePresenter;
     private Context context;
+
+    private int onScrollThreshold = 10;
 
     public FavouriteFragment() {
 
@@ -127,6 +130,7 @@ public class FavouriteFragment extends BaseFragment implements IFavouriteView {
     @Override
     public void setupToolbar() {
         toolbar.setTitle(R.string.favourite);
+        toolbar.setTitleTextColor(Color.WHITE);
         // 设置 TooBar 的副标题
 //        toolbar.setSubtitle("test");
         ((MainActivity) getActivity()).setSupportActionBar(toolbar);
@@ -174,8 +178,7 @@ public class FavouriteFragment extends BaseFragment implements IFavouriteView {
         recyclerView.setOnLoadMoreListener(new UltimateRecyclerView.OnLoadMoreListener() {
             @Override
             public void loadMore(int itemsCount, int maxLastVisiblePosition) {
-                // TODO: 2016/2/1 下面代码可能有问题，需要关注！
-                favouritePresenter.onLoadMore(itemsCount, 0);
+                favouritePresenter.onLoadMore(itemsCount, maxLastVisiblePosition);
             }
         });
 
@@ -188,13 +191,28 @@ public class FavouriteFragment extends BaseFragment implements IFavouriteView {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
+
+                boolean isSignificantDelta = Math.abs(dy) > onScrollThreshold;
+                if (isSignificantDelta) {
+                    if (dy > 0) {
+//                        favouritePresenter.onRecyclerViewScrollUp();
+                    } else {
+//                        favouritePresenter.onRecyclerViewScrollDown();
+                    }
+                }
             }
         });
     }
 
     @Override
-    public void appendAdapterDateSet(List<IInstagramModel> items) {
+    public void appendAdapterDataSet(List<IInstagramModel> items) {
         ultimateRecyclerViewAdapter.addItem(items);
+        notifyAdapterDataSetChanged();
+    }
+
+    @Override
+    public void clearAdapterDataSet() {
+        ultimateRecyclerViewAdapter.clearItem();
     }
 
     @Override
@@ -208,6 +226,6 @@ public class FavouriteFragment extends BaseFragment implements IFavouriteView {
 
     @Override
     public void scrollToPosition(int position) {
-
+        recyclerView.scrollVerticallyToPosition(position);
     }
 }

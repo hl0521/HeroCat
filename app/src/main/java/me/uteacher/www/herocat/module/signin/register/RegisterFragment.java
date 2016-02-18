@@ -231,6 +231,8 @@ public class RegisterFragment extends BaseFragment implements IRegisterView {
     @Override
     public void setupToolbar() {
         toolbar.setTitle(R.string.login_register);
+        toolbar.setTitleTextColor(Color.WHITE);
+
         ((MainActivity) getActivity()).setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(R.drawable.icon_white_previous);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {

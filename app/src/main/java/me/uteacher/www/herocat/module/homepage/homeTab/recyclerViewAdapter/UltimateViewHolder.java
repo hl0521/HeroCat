@@ -3,11 +3,15 @@ package me.uteacher.www.herocat.module.homepage.homeTab.recyclerViewAdapter;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.support.v7.widget.CardView;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.VideoView;
@@ -20,13 +24,12 @@ import butterknife.ButterKnife;
 import me.uteacher.www.herocat.R;
 import me.uteacher.www.herocat.model.instagram.IInstagramModel;
 import me.uteacher.www.herocat.module.main.MainActivity;
+import me.uteacher.www.herocat.util.DownloadHelper.DownloadHelperFactory;
 
 /**
  * Created by HL0521 on 2016/1/21.
  */
 public class UltimateViewHolder extends UltimateRecyclerviewViewHolder implements ICardView {
-
-    private Context context;
 
     @Bind(R.id.instagram_src)
     TextView instagramSrc;
@@ -45,9 +48,12 @@ public class UltimateViewHolder extends UltimateRecyclerviewViewHolder implement
     @Bind(R.id.share_cardview)
     TextView shareCardview;
     @Bind(R.id.cardview)
-    CardView cardview;
+    LinearLayout cardview;
     @Bind(R.id.progressBar_video)
     ProgressBar progressBarVideo;
+
+    private Context context;
+    private int videoCurrentPosition = 0;
 
     public UltimateViewHolder(View itemView, boolean isItem) {
         super(itemView);
@@ -70,7 +76,7 @@ public class UltimateViewHolder extends UltimateRecyclerviewViewHolder implement
 
     @Override
     public void setCardLike() {
-        Drawable drawable = context.getApplicationContext().getResources().getDrawable(R.drawable.like_filled);
+        Drawable drawable = context.getApplicationContext().getResources().getDrawable(R.drawable.thumb_up_filled);
         if (drawable != null) {
             drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
         }
@@ -79,7 +85,7 @@ public class UltimateViewHolder extends UltimateRecyclerviewViewHolder implement
 
     @Override
     public void clearCardLike() {
-        Drawable drawable = context.getApplicationContext().getResources().getDrawable(R.drawable.like_empty);
+        Drawable drawable = context.getApplicationContext().getResources().getDrawable(R.drawable.thumb_up);
         if (drawable != null) {
             drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
         }
@@ -117,6 +123,7 @@ public class UltimateViewHolder extends UltimateRecyclerviewViewHolder implement
     @Override
     public void showVideoView() {
         videoView.setVisibility(View.VISIBLE);
+        btnVideoControl.setImageResource(R.drawable.video_play);
     }
 
     @Override
@@ -146,17 +153,84 @@ public class UltimateViewHolder extends UltimateRecyclerviewViewHolder implement
 
     @Override
     public void loadVideo(String uri) {
-
+        videoView.setVideoURI(Uri.parse(uri));
+        videoCurrentPosition = videoView.getCurrentPosition();
     }
 
     @Override
     public void startVideo() {
+        videoView.requestFocus();
         videoView.start();
+    }
+
+    @Override
+    public void pauseVideo() {
+        videoView.pause();
     }
 
     @Override
     public void stopVideo() {
         videoView.stopPlayback();
+    }
+
+    @Override
+    public void setupVideoControlBtn(final ICardPresenter cardPresenter, final IInstagramModel instagramModel) {
+        btnVideoControl.setClickable(true);
+        btnVideoControl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                videoCurrentPosition = videoView.getCurrentPosition();
+                if (videoCurrentPosition != 0) {  // 并非初次加载视频，接着以前的进度播放
+                    if (videoView.isPlaying()) {
+                        btnVideoControl.setImageResource(R.drawable.video_play);
+                        cardPresenter.onVideoPauseBtnClicked(UltimateViewHolder.this, instagramModel);
+                    } else {
+                        btnVideoControl.setImageResource(R.drawable.video_pause);
+                        cardPresenter.onVideoPlayBtnClicked(UltimateViewHolder.this, instagramModel, false);
+                        hideVideoControlBtn();
+                    }
+                } else {
+                    btnVideoControl.setImageResource(R.drawable.video_pause);
+                    cardPresenter.onVideoPlayBtnClicked(UltimateViewHolder.this, instagramModel, true);
+                    hideVideoControlBtn();
+                }
+
+            }
+        });
+    }
+
+    @Override
+    public void setupVideoView(final ICardPresenter cardPresenter, final IInstagramModel instagramModel) {
+        videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mp) {
+                cardPresenter.onVideoPrepared(UltimateViewHolder.this, instagramModel);
+            }
+        });
+
+        videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                btnVideoControl.setImageResource(R.drawable.video_play);
+                cardPresenter.onVideoCompleted(UltimateViewHolder.this, instagramModel);
+            }
+        });
+
+        videoView.setOnTouchListener(new OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    if (videoView.isPlaying()) {
+                        if (btnVideoControl.getVisibility() == View.VISIBLE) {
+                            hideVideoControlBtn();
+                        } else {
+                            showVideoControlBtn();
+                        }
+                    }
+                }
+                return false;
+            }
+        });
     }
 
     @Override

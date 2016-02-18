@@ -96,7 +96,9 @@ public class HomeTabPresenterImpl extends BasePresenter implements IHomeTabPrese
 
     @Override
     public void onDestroy() {
-
+        homeTabView = null;
+        homeTabInteractor = null;
+        cardInteractor = null;
     }
 
     @Override
@@ -214,7 +216,8 @@ public class HomeTabPresenterImpl extends BasePresenter implements IHomeTabPrese
     public void onCardViewBind(ICardView cardView, IInstagramModel instagramModel) {
         InstagramBean instagramBean = instagramModel.getInstagramBean();
 
-        cardView.setOwner(instagramBean.getOwner() + "@instagram");
+        String owner = instagramBean.getOwner();
+        cardView.setOwner((owner.length() < 12) ? owner : owner.substring(0, 11));
         cardView.setImageURI(instagramBean.getDisplay_src());
         cardView.setCardLikeCount(instagramBean.getLike_count());
 
@@ -244,6 +247,8 @@ public class HomeTabPresenterImpl extends BasePresenter implements IHomeTabPrese
         if (instagramBean.getIs_video()) {
             cardView.showVideoView();
             cardView.showVideoControlBtn();
+            cardView.setupVideoControlBtn(this, instagramModel);
+            cardView.setupVideoView(this, instagramModel);
         } else {
             cardView.hideVideoView();
             cardView.hideVideoControlBtn();
@@ -251,8 +256,49 @@ public class HomeTabPresenterImpl extends BasePresenter implements IHomeTabPrese
     }
 
     @Override
-    public void onVideoControlBtnClicked(ICardView cardView, IInstagramModel instagramModel) {
+    public void onVideoPlayBtnClicked(final ICardView cardView, IInstagramModel instagramModel, boolean firstLoad) {
+        if (!firstLoad) {
+            cardView.hideImageView();
+            cardView.startVideo();
+            return;
+        }
 
+        if (instagramModel.getInstagramBean().getIs_video()) {
+            homeTabInteractor.locateVideoUri(instagramModel, new IHomeTabInteractor.onVideoUriLocatedCallback() {
+                @Override
+                public void onSuccess(IInstagramModel instagramModel, String uri) {
+                    cardView.loadVideo(uri);
+                    cardView.hideImageView();
+                    cardView.startVideo();
+                }
+
+                @Override
+                public void onFailure(int error) {
+                    homeTabView.getMainView().showMessage("Play error : " + error);
+                }
+            });
+        }
+    }
+
+    @Override
+    public void onVideoPauseBtnClicked(ICardView cardView, IInstagramModel instagramModel) {
+        if (instagramModel.getInstagramBean().getIs_video()) {
+            cardView.pauseVideo();
+            cardView.showVideoControlBtn();
+        }
+    }
+
+    @Override
+    public void onVideoPrepared(ICardView cardView, IInstagramModel instagramModel) {
+
+    }
+
+    @Override
+    public void onVideoCompleted(ICardView cardView, IInstagramModel instagramModel) {
+        if (instagramModel.getInstagramBean().getIs_video()) {
+            cardView.showVideoControlBtn();
+            cardView.showImageView();
+        }
     }
 
     @Override
@@ -360,16 +406,6 @@ public class HomeTabPresenterImpl extends BasePresenter implements IHomeTabPrese
 
     @Override
     public void onCommentBtnClicked(ICardView cardView, IInstagramModel instagramModel) {
-
-    }
-
-    @Override
-    public void onVideoPrepared(ICardView cardView, IInstagramModel instagramModel) {
-
-    }
-
-    @Override
-    public void onVideoCompleted(ICardView cardView, IInstagramModel instagramModel) {
 
     }
 }

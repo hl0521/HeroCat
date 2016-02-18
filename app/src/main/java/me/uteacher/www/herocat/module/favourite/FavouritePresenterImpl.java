@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.uteacher.www.herocat.app.BasePresenter;
+import me.uteacher.www.herocat.config.DefaultAppConfig;
 import me.uteacher.www.herocat.model.instagram.IInstagramModel;
 import me.uteacher.www.herocat.model.instagram.InstagramBean;
 import me.uteacher.www.herocat.model.user.IUserModel;
@@ -50,8 +51,7 @@ public class FavouritePresenterImpl extends BasePresenter implements IFavouriteP
                     , new IFavouriteInteractor.OnGetUserFavouriteItemsListener() {
                 @Override
                 public void onSuccess(IUserModel userModel, List<IInstagramModel> instagramModels) {
-                    favouriteView.appendAdapterDateSet(instagramModels);
-                    favouriteView.notifyAdapterDataSetChanged();
+                    favouriteView.appendAdapterDataSet(instagramModels);
                 }
 
                 @Override
@@ -83,13 +83,64 @@ public class FavouritePresenterImpl extends BasePresenter implements IFavouriteP
     }
 
     @Override
-    public void onLoadMore(int currentCount, int lastVisible) {
+    public void onLoadMore(int currentCount, final int lastVisible) {
+        if (isOnLoad) {
+            return;
+        }
 
+        isOnLoad = true;
+        IUserModel userModel = favouriteView.getMainView().getUserModel();
+
+        if (userModel == null) {
+            return;
+        }
+
+        favouriteInteractor.getUserFavouriteItems(userModel, DefaultAppConfig.DEFAULT_ITEM_LIMIT, lastVisible
+                , new IFavouriteInteractor.OnGetUserFavouriteItemsListener() {
+            @Override
+            public void onSuccess(IUserModel userModel, List<IInstagramModel> instagramModels) {
+                if (instagramModels.size() == 0) {
+                }
+                favouriteView.appendAdapterDataSet(instagramModels);
+                isOnLoad = false;
+            }
+
+            @Override
+            public void onFailure(String error) {
+                favouriteView.getMainView().showMessage(error);
+                isOnLoad = false;
+            }
+        });
     }
 
     @Override
     public void onRefresh() {
+        if (isOnRefresh) {
+            return;
+        }
 
+        isOnRefresh = true;
+
+        IUserModel userModel = favouriteView.getMainView().getUserModel();
+
+        if (userModel == null) {
+            return;
+        }
+
+        favouriteInteractor.getUserFavouriteItems(userModel, new IFavouriteInteractor.OnGetUserFavouriteItemsListener() {
+            @Override
+            public void onSuccess(IUserModel userModel, List<IInstagramModel> instagramModels) {
+                favouriteView.clearAdapterDataSet();
+                favouriteView.appendAdapterDataSet(instagramModels);
+                isOnRefresh = false;
+            }
+
+            @Override
+            public void onFailure(String error) {
+                favouriteView.getMainView().showMessage(error);
+                isOnRefresh = false;
+            }
+        });
     }
 
     @Override
@@ -101,7 +152,8 @@ public class FavouritePresenterImpl extends BasePresenter implements IFavouriteP
     public void onCardViewBind(ICardView cardView, IInstagramModel instagramModel) {
         InstagramBean instagramBean = instagramModel.getInstagramBean();
 
-        cardView.setOwner(instagramBean.getOwner() + "@instagram");
+        String owner = instagramBean.getOwner();
+        cardView.setOwner((owner.length() < 12) ? owner : owner.substring(0, 11));
         cardView.setImageURI(instagramBean.getDisplay_src());
         cardView.setCardLikeCount(instagramBean.getLike_count());
 
@@ -138,7 +190,22 @@ public class FavouritePresenterImpl extends BasePresenter implements IFavouriteP
     }
 
     @Override
-    public void onVideoControlBtnClicked(ICardView cardView, IInstagramModel instagramModel) {
+    public void onVideoPlayBtnClicked(ICardView cardView, IInstagramModel instagramModel, boolean firstLoad) {
+
+    }
+
+    @Override
+    public void onVideoPauseBtnClicked(ICardView cardView, IInstagramModel instagramModel) {
+
+    }
+
+    @Override
+    public void onVideoPrepared(ICardView cardView, IInstagramModel instagramModel) {
+
+    }
+
+    @Override
+    public void onVideoCompleted(ICardView cardView, IInstagramModel instagramModel) {
 
     }
 
@@ -221,16 +288,6 @@ public class FavouritePresenterImpl extends BasePresenter implements IFavouriteP
 
     @Override
     public void onCommentBtnClicked(ICardView cardView, IInstagramModel instagramModel) {
-
-    }
-
-    @Override
-    public void onVideoPrepared(ICardView cardView, IInstagramModel instagramModel) {
-
-    }
-
-    @Override
-    public void onVideoCompleted(ICardView cardView, IInstagramModel instagramModel) {
 
     }
 

@@ -71,7 +71,7 @@ public interface IHomeTabInteractor {
     }
 
     /**
-     * 根据 InstagramModel ，定位视频 ？？？？？？？？待补充
+     * 根据 InstagramModel ，查找所需的视频文件（如果本地存在，则读取本地文件的Uri，如果不存在，则从网络下载）
      *
      * @param instagramModel InstagramModel 数据
      * @param callback       回调函数
@@ -80,7 +80,9 @@ public interface IHomeTabInteractor {
 
     public interface onVideoUriLocatedCallback {
 
-        public void onVideoUriLocated(IInstagramModel instagramModel, String uri);
+        public void onSuccess(IInstagramModel instagramModel, String uri);
+
+        public void onFailure(int error);
 
     }
 }

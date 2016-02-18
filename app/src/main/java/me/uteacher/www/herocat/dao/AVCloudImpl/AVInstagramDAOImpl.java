@@ -10,8 +10,10 @@ import com.avos.avoscloud.SaveCallback;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import me.uteacher.www.herocat.dao.BaseDAO;
 import me.uteacher.www.herocat.dao.DAOException;
@@ -147,6 +149,8 @@ public class AVInstagramDAOImpl extends BaseDAO implements IInstagramDAO {
         avQuery.setLimit(limit);
         avQuery.setSkip(skip);
         avQuery.orderByDescending("createdAt");
+        avQuery.setCachePolicy(AVQuery.CachePolicy.NETWORK_ELSE_CACHE);
+        avQuery.setMaxCacheAge(TimeUnit.DAYS.toMillis(3));
 
         avQuery.findInBackground(new FindCallback<AVObject>() {
             @Override
@@ -173,6 +177,8 @@ public class AVInstagramDAOImpl extends BaseDAO implements IInstagramDAO {
         avQuery.orderByDescending("like_count");
         avQuery.setLimit(limit);
         avQuery.setSkip(skip);
+        avQuery.setCachePolicy(AVQuery.CachePolicy.NETWORK_ELSE_CACHE);
+        avQuery.setMaxCacheAge(TimeUnit.DAYS.toMillis(3));
 
         avQuery.findInBackground(new FindCallback<AVObject>() {
             @Override
@@ -201,6 +207,8 @@ public class AVInstagramDAOImpl extends BaseDAO implements IInstagramDAO {
         avQuery.setLimit(limit);
         avQuery.setSkip(skip);
         avQuery.orderByDescending("createdAt");
+        avQuery.setCachePolicy(AVQuery.CachePolicy.NETWORK_ELSE_CACHE);
+        avQuery.setMaxCacheAge(TimeUnit.DAYS.toMillis(3));
 
         avQuery.findInBackground(new FindCallback<AVObject>() {
             @Override

@@ -1,5 +1,6 @@
 package me.uteacher.www.herocat.module.main;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -14,7 +15,10 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.view.menu.MenuWrapperFactory;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,12 +47,15 @@ import me.uteacher.www.herocat.module.favourite.FavouriteFragment;
 import me.uteacher.www.herocat.module.homepage.HomepageFragment;
 import me.uteacher.www.herocat.module.setting.SettingFragment;
 import me.uteacher.www.herocat.module.signin.login.LoginFragment;
+import me.uteacher.www.herocat.util.DownloadHelper.AppDownloadManager;
 import me.uteacher.www.herocat.widget.CircleImageView;
 
 /**
  * Created by HL0521 on 2016/1/19.
  */
 public class MainActivity extends BaseActivity implements IMainView, NavigationView.OnNavigationItemSelectedListener {
+
+    private static final String TAG = "MainActivity";
 
     @Bind(R.id.main_container)
     FrameLayout mainContainer;
@@ -111,6 +118,38 @@ public class MainActivity extends BaseActivity implements IMainView, NavigationV
     protected void onDestroy() {
         super.onDestroy();
         mainPresenter.onDestroy();
+    }
+
+    // 此处是为了实现功能：点击 EditText 区域外的其它地方，隐藏 软键盘
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
+            View view = getCurrentFocus();
+
+            if (isShouldHideInputKeyboard(view, ev)) {
+                InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (inputMethodManager != null) {
+                    inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                }
+            }
+        }
+
+        return super.dispatchTouchEvent(ev);
+    }
+
+    private boolean isShouldHideInputKeyboard(View view, MotionEvent event) {
+        if ((view != null) && (view instanceof EditText)) {
+            int[] leftTop = {0, 0};
+
+            view.getLocationInWindow(leftTop);
+            int left = leftTop[0];
+            int top = leftTop[1];
+            int right = left + view.getWidth();
+            int bottom = top + view.getHeight();
+
+            return !((event.getX() > left) && (event.getX() < right) && (event.getY() > top) && event.getY() < bottom);
+        }
+        return true;
     }
 
     @Override

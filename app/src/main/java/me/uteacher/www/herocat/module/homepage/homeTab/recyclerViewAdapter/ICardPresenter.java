@@ -24,16 +24,38 @@ public interface ICardPresenter {
     public void onCardViewBind(ICardView cardView, IInstagramModel instagramModel);
 
     /**
-     * 当 视频控制 按钮被点击时，相应的回调函数
-     * 以下各函数 <code>onLikeBtnClicked</code>，<code>onFavouriteBtnClicked</code>，
-     * <code>onShareBtnClicked</code>，<code>onVideoPrepared</code>，
-     * <code>onCommentBtnClicked</code>等类似
+     * * 当 视频播放 / 视频暂停 按钮被点击时，相应的回调函数
+     *
+     * @param cardView       被点击的按钮所在的 CardView
+     * @param instagramModel 被点击的按钮所在 CardView 的内容来源
+     * @param firstLoad      视频是否是第一次加载：true-->是；false-->否
+     */
+    public void onVideoPlayBtnClicked(ICardView cardView, IInstagramModel instagramModel, boolean firstLoad);
+
+    public void onVideoPauseBtnClicked(ICardView cardView, IInstagramModel instagramModel);
+
+    /**
+     * 当视频准备好以后，所进行的操作
+     *
+     * @param cardView
+     * @param instagramModel
+     */
+    public void onVideoPrepared(ICardView cardView, IInstagramModel instagramModel);
+
+    /**
+     * 当视频播放结束后，所进行的操作
+     *
+     * @param cardView
+     * @param instagramModel
+     */
+    public void onVideoCompleted(ICardView cardView, IInstagramModel instagramModel);
+
+    /**
+     * 当 喜欢 / 收藏 / 分享 / 评论 按钮被点击时，相应的回调函数
      *
      * @param cardView       被点击的按钮所在的 CardView
      * @param instagramModel 被点击的按钮所在 CardView 的内容来源
      */
-    public void onVideoControlBtnClicked(ICardView cardView, IInstagramModel instagramModel);
-
     public void onLikeBtnClicked(ICardView cardView, IInstagramModel instagramModel);
 
     public void onFavouriteBtnClicked(ICardView cardView, IInstagramModel instagramModel);
@@ -41,14 +63,4 @@ public interface ICardPresenter {
     public void onShareBtnClicked(ICardView cardView, IInstagramModel instagramModel);
 
     public void onCommentBtnClicked(ICardView cardView, IInstagramModel instagramModel);
-
-    /**
-     * 当视频准备好以后，具体功能描述待完善
-     *
-     * @param cardView
-     * @param instagramModel
-     */
-    public void onVideoPrepared(ICardView cardView, IInstagramModel instagramModel);
-
-    public void onVideoCompleted(ICardView cardView, IInstagramModel instagramModel);
 }

@@ -13,6 +13,7 @@
     <color name="fuchsia">#FF00FF</color>
     <color name="yellow">#FFFF00</color>
     <color name="white">#FFFFFF</color>
+    <color name="apparent">#00000000</color>
     <!-- Common Color -->
     <color name="lightGray">#D3D3D3</color>
     <color name="dimGray">#696969</color>

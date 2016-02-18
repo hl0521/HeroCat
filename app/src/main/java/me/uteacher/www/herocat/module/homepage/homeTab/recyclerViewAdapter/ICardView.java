@@ -70,11 +70,29 @@ public interface ICardView {
     public void loadVideo(String uri);
 
     /**
-     * 播放/暂停 视频
+     * 播放 / 暂停 / 停止 视频
      */
     public void startVideo();
 
+    public void pauseVideo();
+
     public void stopVideo();
+
+    /**
+     * 初始设置 VideoControlBtn 按键的功能
+     *
+     * @param cardPresenter  用来处理当前事件的 CardPresenter
+     * @param instagramModel 被点击按钮所在的 InstagramModel
+     */
+    public void setupVideoControlBtn(ICardPresenter cardPresenter, IInstagramModel instagramModel);
+
+    /**
+     * 初始设置 VideoView
+     *
+     * @param cardPresenter  用来处理当前事件的 CardPresenter
+     * @param instagramModel 被点击按钮所在的 InstagramModel
+     */
+    public void setupVideoView(ICardPresenter cardPresenter, IInstagramModel instagramModel);
 
     /**
      * 显示/隐藏 ImageView

@@ -1,6 +1,7 @@
 package me.uteacher.www.herocat.module.homepage;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
@@ -147,6 +148,7 @@ public class HomepageFragment extends BaseFragment implements IHomepageView {
     @Override
     public void setupToolBar() {
         toolbar.setTitle(R.string.app_name);
+        toolbar.setTitleTextColor(Color.WHITE);
         // 设置 TooBar 的副标题
 //        toolbar.setSubtitle("test");
         ((MainActivity) getActivity()).setSupportActionBar(toolbar);
