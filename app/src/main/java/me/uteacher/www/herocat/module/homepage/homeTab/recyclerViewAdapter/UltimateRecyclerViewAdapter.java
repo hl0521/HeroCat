@@ -11,7 +11,6 @@ import java.util.List;
 
 import me.uteacher.www.herocat.R;
 import me.uteacher.www.herocat.model.instagram.IInstagramModel;
-import me.uteacher.www.herocat.model.instagram.InstagramModel;
 
 /**
  * Created by HL0521 on 2016/1/21.
@@ -57,7 +56,7 @@ public class UltimateRecyclerViewAdapter extends UltimateViewAdapter<UltimateVie
 
     @Override
     public UltimateViewHolder onCreateViewHolder(ViewGroup parent) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview_instagram, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_instagram, parent, false);
         UltimateViewHolder ultimateViewHolder = new UltimateViewHolder(view, true);
         if (cardPresenter != null) {
             cardPresenter.onCardViewCreated(ultimateViewHolder);

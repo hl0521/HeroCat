@@ -34,37 +34,49 @@
                 <View style="@style/MyStyle.SettingItem_SplitBar" />
 
                 <TextView
+                    android:id="@+id/clear_cache"
                     style="@style/MyStyle.SettingItem_Text"
+                    android:background="@drawable/selector_textview"
                     android:text="@string/clear_cache" />
 
                 <View style="@style/MyStyle.SettingItem_SplitLine" />
 
                 <TextView
+                    android:id="@+id/check_new_version"
                     style="@style/MyStyle.SettingItem_Text"
+                    android:background="@drawable/selector_textview"
                     android:text="@string/check_new_version" />
 
                 <View style="@style/MyStyle.SettingItem_SplitBar" />
 
                 <TextView
+                    android:id="@+id/user_feedback"
                     style="@style/MyStyle.SettingItem_Text"
+                    android:background="@drawable/selector_textview"
                     android:text="@string/user_feedback" />
 
                 <View style="@style/MyStyle.SettingItem_SplitLine" />
 
                 <TextView
+                    android:id="@+id/service_terms"
                     style="@style/MyStyle.SettingItem_Text"
+                    android:background="@drawable/selector_textview"
                     android:text="@string/service_terms" />
 
                 <View style="@style/MyStyle.SettingItem_SplitLine" />
 
                 <TextView
+                    android:id="@+id/privacy_policy"
                     style="@style/MyStyle.SettingItem_Text"
+                    android:background="@drawable/selector_textview"
                     android:text="@string/privacy_policy" />
 
                 <View style="@style/MyStyle.SettingItem_SplitLine" />
 
                 <TextView
+                    android:id="@+id/about_herocat"
                     style="@style/MyStyle.SettingItem_Text"
+                    android:background="@drawable/selector_textview"
                     android:text="@string/about_herocat" />
 
             </LinearLayout>

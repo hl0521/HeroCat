@@ -13,6 +13,8 @@ public interface ILoginView extends IBaseView, IDebug {
 
     public void setupToolbar();
 
+    public void showThirdPartyEntry();
+
     public void loginThirdParty(String username, String token, String expires, String snsType, String openId);
 
     public void navigateToForgetPassword();

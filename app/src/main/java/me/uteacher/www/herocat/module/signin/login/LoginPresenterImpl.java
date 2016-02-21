@@ -92,7 +92,7 @@ public class LoginPresenterImpl implements ILoginPresenter {
 
     @Override
     public void onLoginThirdPartyClicked() {
-
+        loginView.showThirdPartyEntry();
     }
 
     @Override

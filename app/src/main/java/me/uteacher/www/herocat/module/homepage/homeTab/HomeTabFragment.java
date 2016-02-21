@@ -24,6 +24,7 @@ import me.uteacher.www.herocat.model.instagram.IInstagramModel;
 import me.uteacher.www.herocat.module.homepage.FABClickedEvent;
 import me.uteacher.www.herocat.module.homepage.IHomepageView;
 import me.uteacher.www.herocat.module.homepage.OnFABClickedListener;
+import me.uteacher.www.herocat.module.homepage.homeTab.comment.CommentFragment;
 import me.uteacher.www.herocat.module.homepage.homeTab.recyclerViewAdapter.ICardPresenter;
 import me.uteacher.www.herocat.module.homepage.homeTab.recyclerViewAdapter.UltimateRecyclerViewAdapter;
 import me.uteacher.www.herocat.module.main.IMainView;
@@ -49,7 +50,6 @@ public class HomeTabFragment extends BaseFragment implements IHomeTabView {
     private IHomepageView homepageView;
     private IHomeTabPresenter homeTabPresenter;
 
-    private LinearLayoutManager linearLayoutManager;
     private UltimateRecyclerViewAdapter ultimateRecyclerViewAdapter;
     private ICardPresenter cardPresenter;
 
@@ -200,7 +200,7 @@ public class HomeTabFragment extends BaseFragment implements IHomeTabView {
     public void setupRecyclerView() {
         recyclerView.setHasFixedSize(false);
 
-        linearLayoutManager = new LinearLayoutManager(context);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(linearLayoutManager);
 
@@ -263,5 +263,12 @@ public class HomeTabFragment extends BaseFragment implements IHomeTabView {
     @Override
     public boolean getUserVisibleHint() {
         return super.getUserVisibleHint();
+    }
+
+    @Override
+    public void navigateToComment(IInstagramModel instagramModel) {
+        getParentFragment().getFragmentManager().beginTransaction().addToBackStack(null)
+                .replace(R.id.main_container, CommentFragment.newInstance(instagramModel, null))
+                .commit();
     }
 }

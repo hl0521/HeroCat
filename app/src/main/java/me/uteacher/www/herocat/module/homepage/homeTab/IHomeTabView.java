@@ -64,4 +64,6 @@ public interface IHomeTabView extends IBaseView, IDebug {
     public String getCategory();
 
     public boolean getUserVisibleHint();
+
+    public void navigateToComment(IInstagramModel instagramModel);
 }

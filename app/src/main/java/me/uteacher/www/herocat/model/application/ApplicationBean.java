@@ -28,7 +28,7 @@ public class ApplicationBean {
      *      "video": {
      *          "title": "英雄猫－给爱体育的你",
      *          "desc": "我在英雄猫发现了NBA和欧冠球星的热门视频。快来跟着球星们一起享受体育快乐吧！",
-     *      "url": "http://www.uteacher.me/instapanda/share/"
+     *          "url": "http://www.uteacher.me/instapanda/share/"
      *      },
      *      "app": {
      *          "title": "英雄猫－给爱体育的你",

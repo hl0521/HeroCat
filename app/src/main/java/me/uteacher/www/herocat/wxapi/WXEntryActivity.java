@@ -17,12 +17,16 @@ import me.uteacher.www.herocat.config.WeChatConfig;
  */
 public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
 
+    private static final String TAG = "WXEntryActivity";
+
     private IWXAPI wxapi;
     private IWXPresenter wxPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        System.out.println(TAG + "onCreate");
 
         wxapi = WXAPIFactory.createWXAPI(this, WeChatConfig.APP_ID, true);
         // 注册到微信
@@ -59,7 +63,7 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
      */
     @Override
     public void onReq(BaseReq baseReq) {
-
+        System.out.println(TAG + "  " + "onReq");
     }
 
     /**
@@ -69,7 +73,7 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
      */
     @Override
     public void onResp(BaseResp baseResp) {
-
+        System.out.println(TAG + "  " + "onResp");
     }
 
 }

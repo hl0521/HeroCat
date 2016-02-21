@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:paddingLeft="24dp"
+    android:paddingRight="24dp">
+
+    <ImageButton
+        android:id="@+id/btn_login_wechat"
+        style="?android:attr/buttonBarButtonStyle"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/share_button_size"
+        android:layout_weight="1"
+        android:scaleType="fitCenter"
+        android:src="@drawable/icon_wechat"
+        android:textSize="12sp" />
+
+    <ImageButton
+        android:id="@+id/btn_login_qq"
+        style="?android:attr/buttonBarButtonStyle"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/share_button_size"
+        android:layout_weight="1"
+        android:scaleType="fitCenter"
+        android:src="@drawable/icon_qq" />
+
+    <ImageButton
+        android:id="@+id/btn_login_weibo"
+        style="?android:attr/buttonBarButtonStyle"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/share_button_size"
+        android:layout_weight="1"
+        android:scaleType="fitCenter"
+        android:src="@drawable/icon_weibo" />
+
+</LinearLayout>

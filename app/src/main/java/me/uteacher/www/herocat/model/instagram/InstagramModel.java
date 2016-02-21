@@ -131,7 +131,7 @@ public class InstagramModel extends BaseModel implements IInstagramModel {
 
         @Override
         public InstagramModel createFromParcel(Parcel source) {
-            return null;
+            return new InstagramModel(source);
         }
 
         @Override

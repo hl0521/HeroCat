@@ -18,14 +18,17 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.avos.avoscloud.AVAnalytics;
+import com.avos.sns.SNS;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,6 +37,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -42,12 +46,15 @@ import me.uteacher.www.herocat.app.BaseActivity;
 import me.uteacher.www.herocat.config.DefaultAppConfig;
 import me.uteacher.www.herocat.model.ModelFactory;
 import me.uteacher.www.herocat.model.application.IApplicationModel;
+import me.uteacher.www.herocat.model.instagram.IInstagramModel;
 import me.uteacher.www.herocat.model.user.IUserModel;
 import me.uteacher.www.herocat.module.favourite.FavouriteFragment;
 import me.uteacher.www.herocat.module.homepage.HomepageFragment;
 import me.uteacher.www.herocat.module.setting.SettingFragment;
 import me.uteacher.www.herocat.module.signin.login.LoginFragment;
 import me.uteacher.www.herocat.util.DownloadHelper.AppDownloadManager;
+import me.uteacher.www.herocat.util.SNSUtil.ISNSUtil;
+import me.uteacher.www.herocat.util.SNSUtil.SNSUtil;
 import me.uteacher.www.herocat.widget.CircleImageView;
 
 /**
@@ -83,7 +90,9 @@ public class MainActivity extends BaseActivity implements IMainView, NavigationV
 
     private MaterialDialog logoutDialog;
     private MaterialDialog needLoginDialog;
+    private MaterialDialog shareToSnsDialog;
 
+    private ISNSUtil snsUtil;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +102,9 @@ public class MainActivity extends BaseActivity implements IMainView, NavigationV
 
         mainPresenter = new MainPresenterImpl(this);
         mainPresenter.onCreate();
+
+        snsUtil = new SNSUtil(this);
+        snsUtil.onCreate(savedInstanceState, getIntent());
 
         AVAnalytics.trackAppOpened(getIntent());
     }
@@ -118,6 +130,7 @@ public class MainActivity extends BaseActivity implements IMainView, NavigationV
     protected void onDestroy() {
         super.onDestroy();
         mainPresenter.onDestroy();
+        snsUtil.onDestroy();
     }
 
     // 此处是为了实现功能：点击 EditText 区域外的其它地方，隐藏 软键盘
@@ -358,6 +371,80 @@ public class MainActivity extends BaseActivity implements IMainView, NavigationV
         } else {
             logoutDialog.show();
         }
+    }
+
+    @Override
+    public void showShareToSnsDialog(String title, String negative, final IInstagramModel instagramModel
+            , final IShareToSNSCallback callback) {
+        if (shareToSnsDialog == null) {
+            shareToSnsDialog = new MaterialDialog.Builder(this)
+                    .title(title)
+                    .customView(R.layout.dialog_share_to_sns, false)
+                    .negativeText(negative)
+                    .onNegative(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .show();
+        } else {
+            shareToSnsDialog.setTitle(title);
+            shareToSnsDialog.setActionButton(DialogAction.NEGATIVE, negative);
+            shareToSnsDialog.show();
+        }
+
+        View view = shareToSnsDialog.getCustomView();
+        ImageButton shareToWechat = (ImageButton) view.findViewById(R.id.btn_share_wechat);
+        shareToWechat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                shareToSnsDialog.dismiss();
+                callback.onShareToWechatClicked(instagramModel);
+            }
+        });
+
+        ImageButton shareToWechatTimeline = (ImageButton) view.findViewById(R.id.btn_share_wechat_timeline);
+        shareToWechatTimeline.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                shareToSnsDialog.dismiss();
+                callback.onShareToWechatTimelineClicked(instagramModel);
+            }
+        });
+
+        ImageButton shareToQQ = (ImageButton) view.findViewById(R.id.btn_share_qq);
+        shareToQQ.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                shareToSnsDialog.dismiss();
+                callback.onShareToQQClicked(instagramModel);
+            }
+        });
+
+        ImageButton shareToWeibo = (ImageButton) view.findViewById(R.id.btn_share_weibo);
+        shareToWeibo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                shareToSnsDialog.dismiss();
+                callback.onShareToWeiboClicked(instagramModel);
+            }
+        });
+    }
+
+    @Override
+    public void shareToWechat(String webUrl, String title, String description, InputStream imageInput, boolean timeline) {
+        snsUtil.shareToWechat(webUrl, title, description, imageInput, timeline);
+    }
+
+    @Override
+    public void shareToQQ(String webUrl, String title, String description, String imageUrl, String appName) {
+
+    }
+
+    @Override
+    public void shareToWeibo(String webUrl, String title, String description, InputStream imageInput) {
+
     }
 
     @Override

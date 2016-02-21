@@ -12,7 +12,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
+
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -226,6 +230,46 @@ public class LoginFragment extends BaseFragment implements ILoginView {
                 getFragmentManager().popBackStack();
             }
         });
+    }
+
+    @Override
+    public void showThirdPartyEntry() {
+        final MaterialDialog materialDialog = new MaterialDialog.Builder(context)
+                .title("第三方登陆")
+                .customView(R.layout.dialog_login_thirdparty, false)
+                .negativeText("取消")
+                .onNegative(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(MaterialDialog dialog, DialogAction which) {
+                        dialog.dismiss();
+                    }
+                })
+                .show();
+
+        View view = materialDialog.getCustomView();
+        if (view != null) {
+            ImageButton loginWithWechat = (ImageButton) view.findViewById(R.id.btn_login_wechat);
+            ImageButton loginWithQQ = (ImageButton) view.findViewById(R.id.btn_login_qq);
+            ImageButton loginWithWeibo = (ImageButton) view.findViewById(R.id.btn_login_weibo);
+            loginWithWechat.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    materialDialog.dismiss();
+                }
+            });
+            loginWithQQ.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    materialDialog.dismiss();
+                }
+            });
+            loginWithWeibo.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    materialDialog.dismiss();
+                }
+            });
+        }
     }
 
     @Override

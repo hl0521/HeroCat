@@ -3,9 +3,12 @@ package me.uteacher.www.herocat.module.main;
 import android.graphics.Bitmap;
 import android.net.Uri;
 
+import java.io.InputStream;
+
 import me.uteacher.www.herocat.app.IBaseView;
 import me.uteacher.www.herocat.app.IDebug;
 import me.uteacher.www.herocat.model.application.IApplicationModel;
+import me.uteacher.www.herocat.model.instagram.IInstagramModel;
 import me.uteacher.www.herocat.model.user.IUserModel;
 
 /**
@@ -99,5 +102,49 @@ public interface IMainView extends IBaseView, IDebug {
      */
     public void showLogoutDialog(String title, String message, String positive, String negative
             , IDialogCallback dialogCallback);
+
+    /**
+     * 分享功能对话框
+     *
+     * @param title          Dialog 的标题
+     * @param negative       Dialog 中 Negative 按钮显示的内容
+     * @param instagramModel InstagramModel
+     * @param callback       回调函数
+     */
+    public void showShareToSnsDialog(String title, String negative, IInstagramModel instagramModel
+            , IShareToSNSCallback callback);
+
+    /**
+     * 分享到微信
+     *
+     * @param webUrl
+     * @param title
+     * @param description
+     * @param imageInput  待分享的图片流
+     * @param timeline    true：分享到微信朋友圈，false：分享到微信朋友
+     */
+    public void shareToWechat(String webUrl, String title, String description
+            , InputStream imageInput, boolean timeline);
+
+    /**
+     * 分享到qq
+     *
+     * @param webUrl
+     * @param title
+     * @param description
+     * @param imageUrl
+     * @param appName
+     */
+    public void shareToQQ(String webUrl, String title, String description, String imageUrl, String appName);
+
+    /**
+     * 分享到微博
+     *
+     * @param webUrl
+     * @param title
+     * @param description
+     * @param imageInput
+     */
+    public void shareToWeibo(String webUrl, String title, String description, InputStream imageInput);
 
 }

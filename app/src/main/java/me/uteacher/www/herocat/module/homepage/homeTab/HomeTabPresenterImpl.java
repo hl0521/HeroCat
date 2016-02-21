@@ -1,10 +1,13 @@
 package me.uteacher.www.herocat.module.homepage.homeTab;
 
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import me.uteacher.www.herocat.app.BasePresenter;
 import me.uteacher.www.herocat.config.DefaultAppConfig;
+import me.uteacher.www.herocat.model.application.IApplicationModel;
 import me.uteacher.www.herocat.model.instagram.IInstagramModel;
 import me.uteacher.www.herocat.model.instagram.InstagramBean;
 import me.uteacher.www.herocat.model.user.IUserModel;
@@ -13,6 +16,7 @@ import me.uteacher.www.herocat.module.homepage.homeTab.recyclerViewAdapter.CardI
 import me.uteacher.www.herocat.module.homepage.homeTab.recyclerViewAdapter.ICardInteractor;
 import me.uteacher.www.herocat.module.homepage.homeTab.recyclerViewAdapter.ICardView;
 import me.uteacher.www.herocat.module.main.IDialogCallback;
+import me.uteacher.www.herocat.module.main.IShareToSNSCallback;
 
 /**
  * Created by HL0521 on 2016/1/20.
@@ -399,13 +403,79 @@ public class HomeTabPresenterImpl extends BasePresenter implements IHomeTabPrese
         }
     }
 
+    private void shareToSNS(final String snsTpye, IApplicationModel applicationModel, final IInstagramModel instagramModel) {
+        HashMap<String, String> infoMap;
+        if (instagramModel.getInstagramBean().getIs_video()) {
+            infoMap = applicationModel.getShareInfo("video");
+        } else {
+            infoMap = applicationModel.getShareInfo("image");
+        }
+
+        final String title = infoMap.get("title");
+        final String description = infoMap.get("desc");
+        final String url = infoMap.get("url");
+        final String imageUrl = instagramModel.getInstagramBean().getDisplay_src();
+
+        homeTabInteractor.getImageStream(imageUrl, new IHomeTabInteractor.OnGetImageStreamCallback() {
+            @Override
+            public void onSuccess(InputStream inputStream) {
+                switch (snsTpye) {
+                    case "weixin":
+                        homeTabView.getMainView().shareToWechat(url + instagramModel.getInstagramBean().getObjectId()
+                                , title, description, inputStream, false);
+                        break;
+                    case "weixin timeline":
+                        homeTabView.getMainView().shareToWechat(url + instagramModel.getInstagramBean().getObjectId()
+                                , title, description, inputStream, true);
+                        break;
+                    case "qq":
+                        homeTabView.getMainView().shareToQQ(url + instagramModel.getInstagramBean().getObjectId()
+                                , title, description, imageUrl, "英雄猫");
+                        break;
+                    case "weibo":
+                        homeTabView.getMainView().shareToWeibo(url + instagramModel.getInstagramBean().getObjectId()
+                                , title, description, inputStream);
+                        break;
+                    default:
+                }
+            }
+
+            @Override
+            public void onFailure(String error) {
+                homeTabView.getMainView().showMessage(error);
+            }
+        });
+    }
+
     @Override
     public void onShareBtnClicked(ICardView cardView, IInstagramModel instagramModel) {
+        final IApplicationModel applicationModel = homeTabView.getMainView().getApplicationModel();
 
+        homeTabView.getMainView().showShareToSnsDialog("分享到", "取消", instagramModel, new IShareToSNSCallback() {
+            @Override
+            public void onShareToWechatClicked(IInstagramModel instagramModel) {
+                shareToSNS("weixin", applicationModel, instagramModel);
+            }
+
+            @Override
+            public void onShareToWechatTimelineClicked(IInstagramModel instagramModel) {
+                shareToSNS("weixin timeline", applicationModel, instagramModel);
+            }
+
+            @Override
+            public void onShareToQQClicked(IInstagramModel instagramModel) {
+                shareToSNS("qq", applicationModel, instagramModel);
+            }
+
+            @Override
+            public void onShareToWeiboClicked(IInstagramModel instagramModel) {
+                shareToSNS("weibo", applicationModel, instagramModel);
+            }
+        });
     }
 
     @Override
     public void onCommentBtnClicked(ICardView cardView, IInstagramModel instagramModel) {
-
+        homeTabView.navigateToComment(instagramModel);
     }
 }

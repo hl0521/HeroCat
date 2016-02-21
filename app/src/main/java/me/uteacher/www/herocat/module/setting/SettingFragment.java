@@ -8,6 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -15,6 +16,7 @@ import me.uteacher.www.herocat.R;
 import me.uteacher.www.herocat.app.BaseFragment;
 import me.uteacher.www.herocat.module.main.IMainView;
 import me.uteacher.www.herocat.module.main.MainActivity;
+import me.uteacher.www.herocat.module.setting.settingWeb.SettingWebFragment;
 
 /**
  * Created by HL0521 on 2016/2/1.
@@ -25,8 +27,21 @@ public class SettingFragment extends BaseFragment implements ISettingView {
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+
     @Bind(R.id.toolbar)
     Toolbar toolbar;
+    @Bind(R.id.clear_cache)
+    TextView clearCache;
+    @Bind(R.id.check_new_version)
+    TextView checkNewVersion;
+    @Bind(R.id.user_feedback)
+    TextView userFeedback;
+    @Bind(R.id.service_terms)
+    TextView serviceTerms;
+    @Bind(R.id.privacy_policy)
+    TextView privacyPolicy;
+    @Bind(R.id.about_herocat)
+    TextView aboutHerocat;
 
     private ISettingPresenter settingPresenter;
     private IMainView mainView;
@@ -99,12 +114,55 @@ public class SettingFragment extends BaseFragment implements ISettingView {
 
     @Override
     public void initContentView() {
+        clearCache.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+            }
+        });
+        checkNewVersion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+        userFeedback.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getFragmentManager().beginTransaction().addToBackStack(null)
+                        .replace(R.id.main_container, SettingWebFragment.newInstance(getResources().getString(R.string.user_feedback)
+                                , "http://www.uteacher.me/instapanda/feedback/")).commit();
+            }
+        });
+        serviceTerms.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getFragmentManager().beginTransaction().addToBackStack(null)
+                        .replace(R.id.main_container, SettingWebFragment.newInstance(getResources().getString(R.string.service_terms)
+                                , "http://www.uteacher.me/instapanda/terms/")).commit();
+            }
+        });
+        privacyPolicy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getFragmentManager().beginTransaction().addToBackStack(null)
+                        .replace(R.id.main_container, SettingWebFragment.newInstance(getResources().getString(R.string.privacy_policy)
+                                , "http://www.uteacher.me/instapanda/privacy/")).commit();
+            }
+        });
+        aboutHerocat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getFragmentManager().beginTransaction().addToBackStack(null)
+                        .replace(R.id.main_container, SettingWebFragment.newInstance(getResources().getString(R.string.about_herocat)
+                                , "http://www.uteacher.me/instapanda/about/")).commit();
+            }
+        });
     }
 
     @Override
     public void showMessage(String msg) {
-
+        mainView.showMessage(msg);
     }
 
     @Override
